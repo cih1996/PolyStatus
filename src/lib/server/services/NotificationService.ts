@@ -63,10 +63,9 @@ export class NotificationService {
   }
 
   private static async sendQQ(config: any, text: string) {
-    // 默认代理地址
-    const proxyUrl = config.proxy_url || 'http://121.5.24.60:8999/proxy';
-    // 默认目标地址 (内网地址)
-    const targetUrl = config.target_url || 'http://127.0.0.1:3000/send_private_msg';
+    // 优先使用配置中的 URL，其次使用环境变量，最后使用硬编码默认值
+    const proxyUrl = config.proxy_url || process.env.QQ_PROXY_URL || 'http://121.5.24.60:8999/proxy';
+    const targetUrl = config.target_url || process.env.QQ_TARGET_URL || 'http://127.0.0.1:3000/send_private_msg';
     
     const token = config.token;
     const targetQq = config.target_qq;
@@ -119,4 +118,3 @@ export class NotificationService {
     }
   }
 }
-
