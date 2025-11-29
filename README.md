@@ -14,6 +14,12 @@ PolyStatus 是一个轻量级的全栈状态监控与聚合面板，基于 Svelt
   - 当服务离线或恢复时自动发送提醒。
 - **📱 响应式 UI**: 完美适配移动端和桌面端。
 
+## 📷 界面预览
+
+| 首页状态 | 添加/编辑 | 设置中心 |
+| :---: | :---: | :---: |
+| <img src="helper/screenshot/1.png" width="100%"> | <img src="helper/screenshot/2.png" width="100%"> | <img src="helper/screenshot/3.png" width="100%"> |
+
 ## 快速开始
 
 ### 1. 环境要求
@@ -81,6 +87,15 @@ pnpm dev
        proxy_set_header X-Forwarded-Proto $scheme;
    }
    ```
+
+## 💬 联系与赞助
+
+如果你觉得这个项目对你有帮助，欢迎请作者喝杯咖啡 ☕️
+
+- **微信**: cia8868
+- **QQ**: 85913323
+
+<img src="helper/screenshot/sponsor.jpg" alt="Sponsor" width="300" />
 
 ## 致谢
 
