@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  username      String    @unique @db.VarChar(50)
+  passwordHash  String    @map("password_hash") @db.VarChar(255)
+  email         String?   @db.VarChar(100)
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  
+  monitors      Monitor[]
+  notificationChannels NotificationChannel[]
+
+  @@map("users")
+}
+
+enum MonitorType {
+  ACTIVE
+  PASSIVE
+}
+
+enum MonitorStatus {
+  UP
+  DOWN
+  PENDING
+  MAINTENANCE
+}
+
+enum NotificationType {
+  QQ
+  BARK
+}
+
+model Monitor {
+  id            BigInt        @id @default(autoincrement()) @db.UnsignedBigInt
+  userId        BigInt        @map("user_id") @db.UnsignedBigInt
+  name          String        @db.VarChar(100)
+  description   String?       @db.VarChar(255)
+  
+  type          MonitorType   @default(PASSIVE)
+  
+  // Active Monitor Config
+  activeUrl     String?       @map("active_url") @db.VarChar(500)
+  activeMethod  String?       @default("GET") @map("active_method") @db.VarChar(10)
+  activeInterval Int?         @default(60) @map("active_interval") // seconds
+  activeTimeout Int?          @default(10) @map("active_timeout") // seconds (connection timeout)
+  
+  // Generic Config
+  timeout       Int           @default(0) // seconds (heartbeat timeout), 0 = disabled
+  
+  // Passive Monitor Config
+  passiveKey    String?       @unique @map("passive_key") @db.VarChar(64)
+  
+  // Current Status
+  status        MonitorStatus @default(PENDING)
+  lastCheckAt   DateTime?     @map("last_check_at")
+  lastLatency   Int?          @map("last_latency")
+  isPaused      Boolean       @default(false) @map("is_paused")
+  
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+  
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  logs          MonitorLog[]
+
+  @@index([userId])
+  @@index([passiveKey])
+  @@map("monitors")
+}
+
+model MonitorLog {
+  id          BigInt        @id @default(autoincrement()) @db.UnsignedBigInt
+  monitorId   BigInt        @map("monitor_id") @db.UnsignedBigInt
+  status      MonitorStatus
+  latency     Int
+  statusCode  Int?          @map("status_code")
+  message     String?       @db.Text
+  payload     Json?         // Custom rich data (key-value pairs)
+  createdAt   DateTime      @default(now()) @map("created_at")
+
+  monitor     Monitor       @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+
+  @@index([monitorId, createdAt])
+  @@map("monitor_logs")
+}
+
+model NotificationChannel {
+  id          BigInt           @id @default(autoincrement()) @db.UnsignedBigInt
+  userId      BigInt           @map("user_id") @db.UnsignedBigInt
+  type        NotificationType
+  name        String           @db.VarChar(50)
+  config      Json
+  isEnabled   Boolean          @default(true) @map("is_enabled")
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notification_channels")
+  @@index([userId])
+}
