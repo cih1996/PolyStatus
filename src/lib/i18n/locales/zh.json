@@ -1,0 +1,54 @@
+{
+  "nav": {
+    "home": "首页",
+    "add": "添加",
+    "settings": "设置"
+  },
+  "dashboard": {
+    "total": "总监控",
+    "online": "在线",
+    "offline": "离线",
+    "no_monitors": "暂无监控项",
+    "add_one": "去添加一个",
+    "active": "主动",
+    "passive": "被动"
+  },
+  "add": {
+    "title": "添加监控项",
+    "type_active": "主动监控",
+    "type_passive": "被动接收",
+    "name": "监控名称",
+    "name_placeholder": "例如: 生产环境后端API",
+    "timeout": "心跳超时判定 (秒)",
+    "timeout_hint": "可选，0 为禁用",
+    "timeout_desc": "如果超过指定时间没有收到新的状态报告（或主动检查未执行），监控将被视为离线。",
+    "url": "目标 URL",
+    "interval": "检查频率 (秒)",
+    "interval_hint": "系统将每隔指定时间自动访问该 URL，如果返回 2xx 状态码则视为正常。",
+    "how_to_use": "如何使用？",
+    "passive_desc_1": "创建后，系统将生成一个专属 API Key。你需要配置你的应用或脚本定时向我们发送心跳请求。",
+    "passive_desc_2": "支持发送自定义 JSON 数据，将在详情页展示。",
+    "create_btn": "立即创建",
+    "creating": "创建中..."
+  },
+  "settings": {
+    "title": "通知设置",
+    "subtitle": "配置你的报警通知渠道，当服务异常时及时收到提醒。",
+    "add_btn": "新增通知",
+    "cancel_btn": "取消",
+    "add_title": "添加新渠道",
+    "alias": "备注名称",
+    "alias_placeholder": "例如: 我的个人通知",
+    "qq_target": "目标 QQ 号",
+    "qq_token": "调用令牌 (Bearer Token)",
+    "qq_hint": "提示: 系统将通过代理接口转发消息到 QQ 机器人。",
+    "bark_url": "Bark URL",
+    "bark_hint": "请填写完整的 Bark API 地址。",
+    "save": "保存",
+    "no_channels": "暂无通知渠道，请点击右上角添加。",
+    "test": "测试",
+    "delete": "删除",
+    "confirm_delete": "确定要删除吗？"
+  }
+}
+

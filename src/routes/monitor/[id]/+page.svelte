@@ -21,10 +21,10 @@
 <div class="space-y-6">
   <!-- 顶部导航 -->
   <div class="flex items-center justify-between">
-    <div class="flex items-center gap-4">
-      <a href="/" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
-        <ArrowLeft size={20} />
-      </a>
+  <div class="flex items-center gap-4">
+    <a href="/" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+      <ArrowLeft size={20} />
+    </a>
       <h1 class="font-bold text-lg text-gray-800 truncate max-w-[200px] sm:max-w-md">{monitor.name}</h1>
     </div>
 
@@ -105,20 +105,20 @@
       
       {#if isApiGuideVisible}
         <div class="mt-4 animate-in fade-in slide-in-from-top-2 duration-200">
-          <div class="bg-black/30 rounded p-3 font-mono text-xs break-all mb-4 border border-white/10">
-            {apiEndpoint}
-          </div>
+      <div class="bg-black/30 rounded p-3 font-mono text-xs break-all mb-4 border border-white/10">
+        {apiEndpoint}
+      </div>
 
-          <div class="space-y-2">
-            <p class="text-xs text-gray-500">Curl 示例:</p>
-            <code class="block bg-black/30 rounded p-3 font-mono text-[10px] text-green-400 break-all border border-white/10">
-              curl -X POST "{apiEndpoint}" \<br>
-              -H "Content-Type: application/json" \<br>
+      <div class="space-y-2">
+        <p class="text-xs text-gray-500">Curl 示例:</p>
+        <code class="block bg-black/30 rounded p-3 font-mono text-[10px] text-green-400 break-all border border-white/10">
+          curl -X POST "{apiEndpoint}" \<br>
+          -H "Content-Type: application/json" \<br>
               -d '&#123;"status":"UP", "latency": 45, "cpu": 80, "memory": "2GB"&#125;'
-            </code>
+        </code>
             <p class="text-[10px] text-gray-500 mt-1">提示: 除了 status 和 latency，你可以发送任意 JSON 字段（如 cpu, memory 等），它们将显示在下方日志中。</p>
           </div>
-        </div>
+      </div>
       {/if}
     </div>
   {/if}
@@ -139,7 +139,7 @@
         <div class="flex justify-between">
            <span class="text-blue-600/70">超时判定</span>
            <span class="font-medium text-blue-900">{monitor.timeout ? `${monitor.timeout}秒` : '未设置'}</span>
-         </div>
+        </div>
       </div>
     </div>
   {/if}
@@ -159,25 +159,25 @@
           
           <div class="bg-white p-3 rounded-lg shadow-sm border border-gray-100 flex flex-col">
             <div class="flex justify-between items-start">
-              <div>
-                <div class="flex items-center gap-2 mb-1">
-                  <span class={`text-xs font-bold px-1.5 py-0.5 rounded ${log.status === 'UP' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                    {log.status}
-                  </span>
-                  <span class="text-xs text-gray-400">
-                    {new Date(log.createdAt).toLocaleString()}
-                  </span>
-                </div>
-                {#if log.message}
-                  <p class="text-xs text-gray-600">{log.message}</p>
-                {/if}
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class={`text-xs font-bold px-1.5 py-0.5 rounded ${log.status === 'UP' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                  {log.status}
+                </span>
+                <span class="text-xs text-gray-400">
+                  {new Date(log.createdAt).toLocaleString()}
+                </span>
               </div>
-              <div class="text-right">
-                <div class="text-xs font-mono text-gray-500">{log.latency}ms</div>
-                {#if log.statusCode}
-                  <div class="text-[10px] text-gray-400">HTTP {log.statusCode}</div>
-                {/if}
-              </div>
+              {#if log.message}
+                <p class="text-xs text-gray-600">{log.message}</p>
+              {/if}
+            </div>
+            <div class="text-right">
+              <div class="text-xs font-mono text-gray-500">{log.latency}ms</div>
+              {#if log.statusCode}
+                <div class="text-[10px] text-gray-400">HTTP {log.statusCode}</div>
+              {/if}
+            </div>
             </div>
 
             <!-- 详细信息 Payload 展示 -->

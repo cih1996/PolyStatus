@@ -65,7 +65,7 @@ export class Scheduler {
         if (nextCheck > new Date()) {
             // Log verbose only if needed, otherwise skip to avoid noise
             return;
-        }
+    }
     }
 
     console.log(`[Scheduler] Checking ${monitor.name} (${monitor.activeUrl})...`);

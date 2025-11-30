@@ -1,0 +1,54 @@
+{
+  "nav": {
+    "home": "Home",
+    "add": "Add",
+    "settings": "Settings"
+  },
+  "dashboard": {
+    "total": "Total",
+    "online": "Online",
+    "offline": "Offline",
+    "no_monitors": "No monitors found",
+    "add_one": "Add one",
+    "active": "Active",
+    "passive": "Passive"
+  },
+  "add": {
+    "title": "Add Monitor",
+    "type_active": "Active Monitor",
+    "type_passive": "Passive Receiver",
+    "name": "Monitor Name",
+    "name_placeholder": "e.g. Production API",
+    "timeout": "Heartbeat Timeout (seconds)",
+    "timeout_hint": "Optional, 0 to disable",
+    "timeout_desc": "If no new status report is received within this time, the monitor will be marked as Offline.",
+    "url": "Target URL",
+    "interval": "Check Interval (seconds)",
+    "interval_hint": "The system will automatically check this URL at the specified interval. 2xx status codes are considered normal.",
+    "how_to_use": "How to use?",
+    "passive_desc_1": "After creation, a unique API Key will be generated. You need to configure your app or script to send heartbeat requests periodically.",
+    "passive_desc_2": "Supports sending custom JSON data, which will be displayed on the details page.",
+    "create_btn": "Create Now",
+    "creating": "Creating..."
+  },
+  "settings": {
+    "title": "Notification Settings",
+    "subtitle": "Configure notification channels to get alerted when services go down.",
+    "add_btn": "Add Channel",
+    "cancel_btn": "Cancel",
+    "add_title": "Add New Channel",
+    "alias": "Alias Name",
+    "alias_placeholder": "e.g. My Personal Alerts",
+    "qq_target": "Target QQ",
+    "qq_token": "Bearer Token",
+    "qq_hint": "Note: Messages are forwarded to QQ Bot via proxy.",
+    "bark_url": "Bark URL",
+    "bark_hint": "Please enter the full Bark API URL.",
+    "save": "Save",
+    "no_channels": "No channels found. Click top right to add one.",
+    "test": "Test",
+    "delete": "Delete",
+    "confirm_delete": "Are you sure you want to delete?"
+  }
+}
+

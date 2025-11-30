@@ -1,6 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { Bell, Plus, Trash2, Send, MessageSquare, Smartphone, Check, X } from 'lucide-svelte';
+  import { _ } from 'svelte-i18n';
   
   export let data;
   export let form;
@@ -30,18 +31,18 @@
         <div>
             <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
                 <Bell class="text-blue-600" />
-                通知设置
+                {$_('settings.title')}
             </h1>
-            <p class="text-gray-500 text-sm mt-1">配置你的报警通知渠道，当服务异常时及时收到提醒。</p>
+            <p class="text-gray-500 text-sm mt-1">{$_('settings.subtitle')}</p>
         </div>
         <button 
             class="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 shadow-sm"
             on:click={() => isCreating = !isCreating}
         >
             {#if isCreating}
-                <X size={18} /> 取消
+                <X size={18} /> {$_('settings.cancel_btn')}
             {:else}
-                <Plus size={18} /> 新增通知
+                <Plus size={18} /> {$_('settings.add_btn')}
             {/if}
         </button>
     </div>
@@ -56,7 +57,7 @@
     <!-- 新增表单 -->
     {#if isCreating}
         <div class="bg-white rounded-xl shadow-sm border border-blue-100 p-4 sm:p-6 animate-in fade-in slide-in-from-top-4">
-            <h3 class="font-bold text-gray-800 mb-4">添加新渠道</h3>
+            <h3 class="font-bold text-gray-800 mb-4">{$_('settings.add_title')}</h3>
             <form method="POST" action="?/create" use:enhance class="space-y-4">
                 <!-- 类型选择 -->
                 <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
@@ -64,7 +65,7 @@
                         <input type="radio" name="type" value="QQ" class="peer sr-only" bind:group={selectedType}>
                         <div class="flex items-center justify-center gap-2 p-3 rounded-lg border-2 border-gray-100 peer-checked:border-blue-500 peer-checked:bg-blue-50 transition-all">
                             <MessageSquare size={20} />
-                            <span class="font-medium">QQ 机器人</span>
+                            <span class="font-medium">QQ Bot</span>
                         </div>
                     </label>
                     <label class="flex-1 cursor-pointer">
@@ -78,23 +79,23 @@
 
                 <!-- 名称 -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">备注名称</label>
-                    <input name="name" type="text" placeholder="例如: 我的个人通知" class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none" required>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{$_('settings.alias')}</label>
+                    <input name="name" type="text" placeholder={$_('settings.alias_placeholder')} class="w-full px-4 py-2 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none" required>
                 </div>
 
                 <!-- QQ 配置 -->
                 {#if selectedType === 'QQ'}
                     <div class="space-y-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">目标 QQ 号</label>
-                            <input name="qq_target" type="text" placeholder="例如: 85913323" class="w-full px-4 py-2 rounded-lg border border-gray-200 outline-none" required>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">{$_('settings.qq_target')}</label>
+                            <input name="qq_target" type="text" placeholder="e.g. 85913323" class="w-full px-4 py-2 rounded-lg border border-gray-200 outline-none" required>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">调用令牌 (Bearer Token)</label>
-                            <input name="qq_token" type="text" placeholder="例如: Se&X@%V+u*uO(YH)" class="w-full px-4 py-2 rounded-lg border border-gray-200 outline-none" required>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">{$_('settings.qq_token')}</label>
+                            <input name="qq_token" type="text" placeholder="e.g. Se&X@%V+u*uO(YH)" class="w-full px-4 py-2 rounded-lg border border-gray-200 outline-none" required>
                         </div>
                         <p class="text-xs text-gray-500">
-                            提示: 系统将通过代理接口转发消息到 QQ 机器人。
+                            {$_('settings.qq_hint')}
                         </p>
                     </div>
                 {/if}
@@ -103,18 +104,18 @@
                 {#if selectedType === 'BARK'}
                     <div class="space-y-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Bark URL</label>
-                            <input name="bark_url" type="url" placeholder="例如: https://api.day.app/YOUR_KEY/" class="w-full px-4 py-2 rounded-lg border border-gray-200 outline-none" required>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">{$_('settings.bark_url')}</label>
+                            <input name="bark_url" type="url" placeholder="e.g. https://api.day.app/YOUR_KEY/" class="w-full px-4 py-2 rounded-lg border border-gray-200 outline-none" required>
                         </div>
                         <p class="text-xs text-gray-500">
-                            请填写完整的 Bark API 地址。
+                            {$_('settings.bark_hint')}
                         </p>
                     </div>
                 {/if}
 
                 <div class="pt-2 flex justify-end gap-3">
-                    <button type="button" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg" on:click={() => isCreating = false}>取消</button>
-                    <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 font-medium shadow-sm">保存</button>
+                    <button type="button" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg" on:click={() => isCreating = false}>{$_('settings.cancel_btn')}</button>
+                    <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 font-medium shadow-sm">{$_('settings.save')}</button>
                 </div>
             </form>
         </div>
@@ -127,7 +128,7 @@
                 <div class="bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Bell class="text-gray-400" size={24} />
                 </div>
-                <p class="text-gray-500">暂无通知渠道，请点击右上角添加。</p>
+                <p class="text-gray-500">{$_('settings.no_channels')}</p>
             </div>
         {/if}
 
@@ -160,10 +161,10 @@
                         <button 
                             type="submit" 
                             class="w-full sm:w-auto p-2 hover:bg-blue-50 text-gray-500 hover:text-blue-600 rounded-lg transition-colors flex items-center justify-center gap-1"
-                            title="发送测试消息"
+                            title={$_('settings.test')}
                         >
                             <Send size={16} class="sm:w-[18px] sm:h-[18px]" />
-                            <span class="text-xs font-medium">测试</span>
+                            <span class="text-xs font-medium">{$_('settings.test')}</span>
                         </button>
                     </form>
 
@@ -175,11 +176,11 @@
                         <button 
                             type="submit" 
                             class="w-full sm:w-auto p-2 hover:bg-red-50 text-gray-400 hover:text-red-600 rounded-lg transition-colors flex items-center justify-center"
-                            on:click={(e) => !confirm('确定要删除吗？') && e.preventDefault()}
-                            title="删除"
+                            on:click={(e) => !confirm($_('settings.confirm_delete')) && e.preventDefault()}
+                            title={$_('settings.delete')}
                         >
                             <Trash2 size={16} class="sm:w-[18px] sm:h-[18px]" />
-                            <span class="text-xs font-medium sm:hidden ml-1">删除</span>
+                            <span class="text-xs font-medium sm:hidden ml-1">{$_('settings.delete')}</span>
                         </button>
                     </form>
                 </div>

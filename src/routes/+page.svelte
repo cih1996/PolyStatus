@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { PageData } from './$types';
   import { Activity, Globe, Server, Clock, AlertCircle, CheckCircle2 } from 'lucide-svelte';
-  import type { MonitorStatus } from '@prisma/client';
+  import { _ } from 'svelte-i18n';
   
   export let data: PageData;
 
@@ -24,15 +24,15 @@
 <!-- 统计概览 -->
 <div class="grid grid-cols-3 gap-3 mb-6">
   <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center">
-    <span class="text-xs text-gray-400 mb-1">总监控</span>
+    <span class="text-xs text-gray-400 mb-1">{$_('dashboard.total')}</span>
     <span class="text-xl font-bold text-gray-800">{data.stats?.total || 0}</span>
   </div>
   <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center">
-    <span class="text-xs text-gray-400 mb-1">在线</span>
+    <span class="text-xs text-gray-400 mb-1">{$_('dashboard.online')}</span>
     <span class="text-xl font-bold text-green-600">{data.stats?.up || 0}</span>
   </div>
   <div class="bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center">
-    <span class="text-xs text-gray-400 mb-1">离线</span>
+    <span class="text-xs text-gray-400 mb-1">{$_('dashboard.offline')}</span>
     <span class="text-xl font-bold text-red-600">{data.stats?.down || 0}</span>
   </div>
 </div>
@@ -42,8 +42,8 @@
   {#if !data.monitors || data.monitors.length === 0}
     <div class="text-center py-12 bg-white rounded-xl border border-dashed border-gray-200">
       <Activity class="w-12 h-12 text-gray-200 mx-auto mb-3" />
-      <p class="text-gray-400 text-sm">暂无监控项</p>
-      <a href="/add" class="text-blue-600 text-sm font-medium mt-2 inline-block">去添加一个</a>
+      <p class="text-gray-400 text-sm">{$_('dashboard.no_monitors')}</p>
+      <a href="/add" class="text-blue-600 text-sm font-medium mt-2 inline-block">{$_('dashboard.add_one')}</a>
     </div>
   {/if}
 
@@ -60,10 +60,10 @@
             <div class="flex items-center gap-1 mt-0.5">
               {#if monitor.type === 'ACTIVE'}
                 <Globe size={10} class="text-blue-400" />
-                <span class="text-[10px] text-blue-400 font-medium bg-blue-50 px-1.5 py-0.5 rounded">主动</span>
+                <span class="text-[10px] text-blue-400 font-medium bg-blue-50 px-1.5 py-0.5 rounded">{$_('dashboard.active')}</span>
               {:else}
                 <Server size={10} class="text-purple-400" />
-                <span class="text-[10px] text-purple-400 font-medium bg-purple-50 px-1.5 py-0.5 rounded">被动</span>
+                <span class="text-[10px] text-purple-400 font-medium bg-purple-50 px-1.5 py-0.5 rounded">{$_('dashboard.passive')}</span>
               {/if}
             </div>
           </div>
