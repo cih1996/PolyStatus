@@ -37,6 +37,11 @@ export class NotificationService {
     await this.send(channel, 'PolyStatus 测试', '这是一条测试消息，配置成功！🎉');
   }
 
+  static async testWithConfig(type: 'QQ' | 'BARK', config: Record<string, string>) {
+    const fakeChannel = { type, config };
+    await this.send(fakeChannel, 'PolyStatus 测试', '这是一条测试消息，配置成功！🎉');
+  }
+
   static async notifyAll(userId: bigint, title: string, message: string) {
      const channels = await prisma.notificationChannel.findMany({
          where: { userId, isEnabled: true }

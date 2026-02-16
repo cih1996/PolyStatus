@@ -8,10 +8,46 @@
   
   let isCreating = false;
   let selectedType: 'QQ' | 'BARK' = 'QQ';
-  
+
+  // Form field bindings for test
+  let qqTarget = '';
+  let qqToken = '';
+  let qqProxy = '';
+  let barkUrl = '';
+  let isTesting = false;
+
   // 简单的提示消息逻辑
   let toastMessage: string | null = null;
   let toastType: 'success' | 'error' = 'success';
+
+  async function testConfig() {
+    isTesting = true;
+    try {
+      const body: Record<string, string> = { type: selectedType };
+      if (selectedType === 'QQ') {
+        body.qq_target = qqTarget;
+        body.qq_token = qqToken;
+        body.qq_proxy = qqProxy;
+      } else {
+        body.bark_url = barkUrl;
+      }
+      const res = await fetch('?/testConfig', {
+        method: 'POST',
+        body: new URLSearchParams(body),
+      });
+      const result = await res.json();
+      // SvelteKit returns form action results in a specific format
+      const data = result?.data?.[0] ?? result?.data ?? result;
+      toastMessage = data?.message ?? (data?.success ? $_('settings.test_success') : $_('settings.test_fail'));
+      toastType = data?.success ? 'success' : 'error';
+    } catch {
+      toastMessage = $_('settings.test_fail');
+      toastType = 'error';
+    } finally {
+      isTesting = false;
+      setTimeout(() => toastMessage = null, 3000);
+    }
+  }
 
   $: if (form) {
     if (form.message) {
@@ -88,11 +124,16 @@
                     <div class="space-y-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{$_('settings.qq_target')}</label>
-                            <input name="qq_target" type="text" placeholder="e.g. 85913323" class="w-full px-4 py-2 rounded-lg border border-gray-200 outline-none" required>
+                            <input name="qq_target" type="text" bind:value={qqTarget} placeholder="e.g. 85913323" class="w-full px-4 py-2 rounded-lg border border-gray-200 outline-none" required>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{$_('settings.qq_token')}</label>
-                            <input name="qq_token" type="text" placeholder="e.g. Se&X@%V+u*uO(YH)" class="w-full px-4 py-2 rounded-lg border border-gray-200 outline-none" required>
+                            <input name="qq_token" type="text" bind:value={qqToken} placeholder="e.g. Se&X@%V+u*uO(YH)" class="w-full px-4 py-2 rounded-lg border border-gray-200 outline-none" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">{$_('settings.qq_server')}</label>
+                            <input name="qq_proxy" type="url" bind:value={qqProxy} placeholder="e.g. http://127.0.0.1:8999/proxy" class="w-full px-4 py-2 rounded-lg border border-gray-200 outline-none">
+                            <p class="text-xs text-gray-400 mt-1">{$_('settings.qq_server_hint')}</p>
                         </div>
                         <p class="text-xs text-gray-500">
                             {$_('settings.qq_hint')}
@@ -105,7 +146,7 @@
                     <div class="space-y-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{$_('settings.bark_url')}</label>
-                            <input name="bark_url" type="url" placeholder="e.g. https://api.day.app/YOUR_KEY/" class="w-full px-4 py-2 rounded-lg border border-gray-200 outline-none" required>
+                            <input name="bark_url" type="url" bind:value={barkUrl} placeholder="e.g. https://api.day.app/YOUR_KEY/" class="w-full px-4 py-2 rounded-lg border border-gray-200 outline-none" required>
                         </div>
                         <p class="text-xs text-gray-500">
                             {$_('settings.bark_hint')}
@@ -115,6 +156,10 @@
 
                 <div class="pt-2 flex justify-end gap-3">
                     <button type="button" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg" on:click={() => isCreating = false}>{$_('settings.cancel_btn')}</button>
+                    <button type="button" class="px-4 py-2 text-orange-600 border border-orange-200 hover:bg-orange-50 rounded-lg font-medium flex items-center gap-1.5" on:click={testConfig} disabled={isTesting}>
+                        <Send size={15} />
+                        {isTesting ? $_('settings.testing') : $_('settings.test_btn')}
+                    </button>
                     <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 font-medium shadow-sm">{$_('settings.save')}</button>
                 </div>
             </form>

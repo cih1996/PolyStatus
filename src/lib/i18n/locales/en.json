@@ -42,11 +42,17 @@
     "qq_target": "Target QQ",
     "qq_token": "Bearer Token",
     "qq_hint": "Note: Messages are forwarded to QQ Bot via proxy.",
+    "qq_server": "Proxy Server URL",
+    "qq_server_hint": "Optional. If not set, the system default proxy will be used.",
     "bark_url": "Bark URL",
     "bark_hint": "Please enter the full Bark API URL.",
     "save": "Save",
     "no_channels": "No channels found. Click top right to add one.",
     "test": "Test",
+    "test_btn": "Test Send",
+    "testing": "Testing...",
+    "test_success": "Test message sent successfully",
+    "test_fail": "Test failed",
     "delete": "Delete",
     "confirm_delete": "Are you sure you want to delete?"
   }
