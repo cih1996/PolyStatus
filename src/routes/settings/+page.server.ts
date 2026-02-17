@@ -55,7 +55,7 @@ export const actions: Actions = {
     }
 
     try {
-      await NotificationService.createChannel(user.id, type as any, name, config);
+      await NotificationService.createChannel(user.id, type as 'QQ' | 'BARK', name, config);
       return { success: true };
     } catch (e) {
       console.error(e);
@@ -97,6 +97,10 @@ export const actions: Actions = {
     const data = await request.formData();
     const type = data.get('type')?.toString();
 
+    // Auth check
+    const user = await prisma.user.findUnique({ where: { username: 'demo' } });
+    if (!user) return fail(401, { message: 'Unauthorized' });
+
     if (!type) return fail(400, { message: '缺少类型参数' });
 
     let config: Record<string, string> = {};
@@ -105,7 +109,29 @@ export const actions: Actions = {
       const token = data.get('qq_token')?.toString();
       const targetQq = data.get('qq_target')?.toString();
       if (!token || !targetQq) return fail(400, { message: '请填写 QQ 号和 Token' });
-      config = { token, target_qq: targetQq, proxy_url: data.get('qq_proxy')?.toString() || '' };
+
+      const proxyUrl = data.get('qq_proxy')?.toString() || '';
+      // Validate proxy URL to prevent SSRF
+      if (proxyUrl) {
+        try {
+          const parsed = new URL(proxyUrl);
+          if (!['http:', 'https:'].includes(parsed.protocol)) {
+            return fail(400, { message: '代理地址仅支持 HTTP/HTTPS 协议' });
+          }
+          const hostname = parsed.hostname.toLowerCase();
+          if (hostname === 'localhost' || hostname.startsWith('127.') || hostname.startsWith('10.') ||
+              hostname.startsWith('192.168.') || hostname === '0.0.0.0' || hostname.startsWith('169.254.') ||
+              hostname.startsWith('172.16.') || hostname.startsWith('172.17.') || hostname.startsWith('172.18.') ||
+              hostname.startsWith('172.19.') || hostname.startsWith('172.2') || hostname.startsWith('172.30.') ||
+              hostname.startsWith('172.31.') || hostname === '[::1]') {
+            return fail(400, { message: '代理地址不允许使用内网地址' });
+          }
+        } catch {
+          return fail(400, { message: '代理地址格式无效' });
+        }
+      }
+
+      config = { token, target_qq: targetQq, proxy_url: proxyUrl };
     } else if (type === 'BARK') {
       const barkUrl = data.get('bark_url')?.toString();
       if (!barkUrl) return fail(400, { message: '请填写 Bark URL' });
@@ -115,7 +141,7 @@ export const actions: Actions = {
     }
 
     try {
-      await NotificationService.testWithConfig(type as any, config);
+      await NotificationService.testWithConfig(type as 'QQ' | 'BARK', config);
       return { success: true, message: '测试消息发送成功 ✅' };
     } catch (e: any) {
       return fail(500, { message: '测试失败: ' + e.message });

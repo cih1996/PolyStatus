@@ -53,6 +53,7 @@
     "testing": "Testing...",
     "test_success": "Test message sent successfully",
     "test_fail": "Test failed",
+    "test_fill_required": "Please fill in required fields before testing",
     "delete": "Delete",
     "confirm_delete": "Are you sure you want to delete?"
   }

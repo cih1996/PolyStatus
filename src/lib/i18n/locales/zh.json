@@ -53,6 +53,7 @@
     "testing": "测试中...",
     "test_success": "测试消息发送成功",
     "test_fail": "测试发送失败",
+    "test_fill_required": "请先填写必填项再测试",
     "delete": "删除",
     "confirm_delete": "确定要删除吗？"
   }

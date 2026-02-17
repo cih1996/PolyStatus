@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
+  import { enhance, deserialize } from '$app/forms';
   import { Bell, Plus, Trash2, Send, MessageSquare, Smartphone, Check, X } from 'lucide-svelte';
   import { _ } from 'svelte-i18n';
   
@@ -21,6 +21,20 @@
   let toastType: 'success' | 'error' = 'success';
 
   async function testConfig() {
+    // Client-side validation
+    if (selectedType === 'QQ' && (!qqTarget || !qqToken)) {
+      toastMessage = $_('settings.test_fill_required');
+      toastType = 'error';
+      setTimeout(() => toastMessage = null, 3000);
+      return;
+    }
+    if (selectedType === 'BARK' && !barkUrl) {
+      toastMessage = $_('settings.test_fill_required');
+      toastType = 'error';
+      setTimeout(() => toastMessage = null, 3000);
+      return;
+    }
+
     isTesting = true;
     try {
       const body: Record<string, string> = { type: selectedType };
@@ -35,11 +49,10 @@
         method: 'POST',
         body: new URLSearchParams(body),
       });
-      const result = await res.json();
-      // SvelteKit returns form action results in a specific format
-      const data = result?.data?.[0] ?? result?.data ?? result;
-      toastMessage = data?.message ?? (data?.success ? $_('settings.test_success') : $_('settings.test_fail'));
-      toastType = data?.success ? 'success' : 'error';
+      const actionResult = deserialize(await res.text());
+      const resultData = actionResult.type === 'success' ? actionResult.data : (actionResult.type === 'failure' ? actionResult.data : null);
+      toastMessage = (resultData as any)?.message ?? (actionResult.type === 'success' ? $_('settings.test_success') : $_('settings.test_fail'));
+      toastType = actionResult.type === 'success' ? 'success' : 'error';
     } catch {
       toastMessage = $_('settings.test_fail');
       toastType = 'error';
