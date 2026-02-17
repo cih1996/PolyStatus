@@ -42,11 +42,17 @@
     "qq_target": "目标 QQ 号",
     "qq_token": "调用令牌 (Bearer Token)",
     "qq_hint": "提示: 系统将通过代理接口转发消息到 QQ 机器人。",
+    "qq_server": "代理服务器地址",
+    "qq_server_hint": "可选。不填则使用系统默认代理地址。",
     "bark_url": "Bark URL",
     "bark_hint": "请填写完整的 Bark API 地址。",
     "save": "保存",
     "no_channels": "暂无通知渠道，请点击右上角添加。",
     "test": "测试",
+    "test_btn": "测试发送",
+    "testing": "测试中...",
+    "test_success": "测试消息发送成功",
+    "test_fail": "测试发送失败",
     "delete": "删除",
     "confirm_delete": "确定要删除吗？"
   }

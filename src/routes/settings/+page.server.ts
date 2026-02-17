@@ -81,7 +81,7 @@ export const actions: Actions = {
   test: async ({ request }) => {
     const data = await request.formData();
     const idStr = data.get('id')?.toString();
-    
+
     const user = await prisma.user.findUnique({ where: { username: 'demo' } });
     if (!user || !idStr) return fail(400);
 
@@ -90,6 +90,35 @@ export const actions: Actions = {
         return { success: true, message: '测试消息已发送' };
     } catch (e: any) {
         return fail(500, { message: '发送失败: ' + e.message });
+    }
+  },
+
+  testConfig: async ({ request }) => {
+    const data = await request.formData();
+    const type = data.get('type')?.toString();
+
+    if (!type) return fail(400, { message: '缺少类型参数' });
+
+    let config: Record<string, string> = {};
+
+    if (type === 'QQ') {
+      const token = data.get('qq_token')?.toString();
+      const targetQq = data.get('qq_target')?.toString();
+      if (!token || !targetQq) return fail(400, { message: '请填写 QQ 号和 Token' });
+      config = { token, target_qq: targetQq, proxy_url: data.get('qq_proxy')?.toString() || '' };
+    } else if (type === 'BARK') {
+      const barkUrl = data.get('bark_url')?.toString();
+      if (!barkUrl) return fail(400, { message: '请填写 Bark URL' });
+      config = { bark_url: barkUrl };
+    } else {
+      return fail(400, { message: '不支持的类型' });
+    }
+
+    try {
+      await NotificationService.testWithConfig(type as any, config);
+      return { success: true, message: '测试消息发送成功 ✅' };
+    } catch (e: any) {
+      return fail(500, { message: '测试失败: ' + e.message });
     }
   }
 };
